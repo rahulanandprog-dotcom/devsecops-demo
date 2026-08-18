@@ -110,4 +110,13 @@ jobs:
         with:
           target: 'http://localhost:5000'
           fail_action: false
-          artifact_name: '' # Disables broken auto-artifact upload
+          allow_issue_writing: false # Deprecated issue/artifact API call ko stop karega
+
+      - name: Upload ZAP HTML Report (Modern v4)
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: zap-scan-report
+          path: |
+            report_html.html
+            report_json.json
