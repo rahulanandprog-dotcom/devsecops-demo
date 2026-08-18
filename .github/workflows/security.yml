@@ -34,6 +34,21 @@ jobs:
           scan-type: 'fs'
           scan-ref: '.'
           format: 'table'
-          exit-code: '0' # Abhi fail nahi karenge learning ke liye
+          exit-code: '0'
           ignore-unfixed: true
           severity: 'CRITICAL,HIGH'
+
+  secrets:
+    name: Secret Scan - Gitleaks
+    needs: sca
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Gitleaks ko poori git history check karne ke liye zaroori hai
+
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
