@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-
   pull_request:
     branches:
       - main
@@ -13,13 +12,28 @@ jobs:
   sast:
     name: SAST - Semgrep
     runs-on: ubuntu-latest
-
     container:
       image: semgrep/semgrep
-
     steps:
       - name: Checkout source code
         uses: actions/checkout@v4
-
       - name: Run Semgrep
         run: semgrep scan --config auto .
+
+  sca:
+    name: SCA - Trivy
+    needs: sast
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+      
+      - name: Run Trivy SCA Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'table'
+          exit-code: '0' # Abhi fail nahi karenge learning ke liye
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH'
