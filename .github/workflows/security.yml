@@ -14,13 +14,12 @@ jobs:
     name: SAST - Semgrep
     runs-on: ubuntu-latest
 
+    container:
+      image: semgrep/semgrep
+
     steps:
       - name: Checkout source code
         uses: actions/checkout@v4
 
       - name: Run Semgrep
-        uses: semgrep/semgrep-action@v1
-        with:
-          config: >-
-            p/python
-            p/security-audit
+        run: semgrep scan --config auto .
