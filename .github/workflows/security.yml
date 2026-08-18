@@ -11,6 +11,7 @@ on:
 permissions:
   contents: read
   packages: write
+  issues: write # Fixes the ZAP issue creation permission error
 
 jobs:
   sast:
